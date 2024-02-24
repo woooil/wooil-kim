@@ -23,7 +23,9 @@ img.bird {
 
 img.flower {
   position: absolute;
+  -webkit-transform: translate(-50%, 50%);
   transform: translate(-50%, 50%);
+  -webkit-transform-origin: 0% 100%;
   transform-origin: 0% 100%;
   -webkit-animation: blossom 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   animation: blossom 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;

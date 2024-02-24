@@ -32,8 +32,8 @@ export class Bezier3 {
   }
 
   static getFixedEnds(
-    start?: Coord,
-    end?: Coord,
+    start: Coord | undefined,
+    end: Coord | undefined,
     xMin: number,
     xMax: number,
     yMin: number,

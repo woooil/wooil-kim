@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Bezier3 } from '.././lib/bezier'
 import './World.css'
 
 const TREE_HEIGHT = 300
 const FLOWER_HEIGHT_STD = 35
+const FLOWER_COUNT = 9
 const WORLD_CLASS = 'world'
 const TREE_CLASS = 'tree'
 const BIRD_CLASS = 'bird'
@@ -43,7 +44,7 @@ function World() {
     left: `${50 + pos.x}%`,
     bottom: `calc(${TREE_HEIGHT * 0.6}px + ${pos.y}%)`,
   }
-  const treeBoxStyle = {
+  const treeBoxStyle: React.CSSProperties = {
     position: 'relative',
     left: '50%',
     bottom: `${TREE_HEIGHT * 0.35}px`,
@@ -92,7 +93,7 @@ function World() {
       ...prev,
       {
         id,
-        src: getRandomInt(1, 10),
+        src: getRandomInt(1, FLOWER_COUNT + 1),
         height: getRandom(FLOWER_HEIGHT_STD * 0.9, FLOWER_HEIGHT_STD * 1.1),
         left,
         bottom,
@@ -113,7 +114,7 @@ function World() {
   }
 
   const randomInTreeBox = () => {
-    const world = document.querySelector(`.${WORLD_CLASS}`)
+    const world = document.querySelector(`.${WORLD_CLASS}`)!
     const box = document.querySelectorAll(`.${TREE_BOX_CLASS}`)[
       getRandomInt(0, 3)
     ]
@@ -137,7 +138,7 @@ function World() {
     } else if (
       elements.filter((e) => e.classList.contains(TREE_BOX_CLASS)).length > 0
     ) {
-      const world = document.querySelector(`.${WORLD_CLASS}`)
+      const world = document.querySelector(`.${WORLD_CLASS}`)!
       const left = e.clientX - world.getBoundingClientRect().width / 2
       const bottom = world.getBoundingClientRect().height - e.clientY
       blossom(left, bottom)
@@ -148,6 +149,13 @@ function World() {
       blossom(left, bottom)
     }
   }
+
+  useEffect(() => {
+    for (let i = 1; i <= FLOWER_COUNT; i++) {
+      const img = new Image()
+      img.src = `${process.env.PUBLIC_URL}/img/flower${i}.png`
+    }
+  })
 
   return (
     <div
