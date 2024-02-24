@@ -1,0 +1,86 @@
+.world {
+  width: 100vw;
+  min-height: 100vh;
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    min-height: -webkit-fill-available;
+  }
+  position: absolute;
+}
+
+img.tree {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+img.bird {
+  width: 40px;
+  position: absolute;
+  transform: translate(-50%, 50%);
+  z-index: 9999;
+}
+
+img.flower {
+  position: absolute;
+  transform: translate(-50%, 50%);
+  transform-origin: 0% 100%;
+  -webkit-animation: blossom 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: blossom 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+.tree-box-container {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+img.flower-falling {
+  -webkit-animation: falling 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: falling 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes blossom {
+  0% {
+    -webkit-transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+    transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+  }
+  100% {
+    -webkit-transform: scale(1) translate(-50%, 50%);
+    transform: scale(1) translate(-50%, 50%);
+  }
+}
+
+@keyframes blossom {
+  0% {
+    -webkit-transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+    transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+  }
+  100% {
+    -webkit-transform: scale(1) translate(-50%, 50%);
+    transform: scale(1) translate(-50%, 50%);
+  }
+}
+
+@-webkit-keyframes falling {
+  0% {
+    -webkit-transform: scale(1) translate(-50%, 50%);
+    transform: scale(1) translate(-50%, 50%);
+  }
+  100% {
+    -webkit-transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+    transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+  }
+}
+
+@keyframes falling {
+  0% {
+    -webkit-transform: scale(1) translate(-50%, 50%);
+    transform: scale(1) translate(-50%, 50%);
+  }
+  100% {
+    -webkit-transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+    transform: scale(0) rotate(-50deg) translate(-50%, 50%);
+  }
+}
