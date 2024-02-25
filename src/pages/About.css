@@ -1,0 +1,35 @@
+.content {
+  padding: 0 60px;
+}
+
+.title-link {
+  text-decoration: none;
+}
+
+a {
+  color: inherit;
+}
+
+.contacts {
+  display: flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.contacts.github {
+  padding-bottom: 8px;
+}
+
+.contacts-icon {
+  width: 1.5rem;
+}
+.contacts-icon.github-icon {
+  height: 1rem;
+  object-fit: contain;
+}
+.contacts-icon.mail-icon {
+  font-size: 1rem;
+  text-align: center;
+}

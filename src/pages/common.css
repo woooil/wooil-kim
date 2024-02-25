@@ -1,0 +1,17 @@
+.title {
+  font-family: 'Vollkorn', serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: min(5vmax, 4rem);
+  line-height: 1.2;
+  color: #795548;
+}
+
+nav {
+  padding: 40px 60px;
+}
+
+.icon {
+  font-family: 'Material Symbols Outlined';
+}

@@ -1,10 +1,25 @@
 .world {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100vw;
   min-height: 100vh;
+  overflow: hidden;
   @supports (-webkit-appearance: none) and (stroke-color: transparent) {
     min-height: -webkit-fill-available;
   }
+}
+
+.grass {
   position: absolute;
+  width: 140%;
+  bottom: 0%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.grass > path {
+  fill: #0d830d;
 }
 
 img.tree {
@@ -18,7 +33,7 @@ img.bird {
   width: 40px;
   position: absolute;
   transform: translate(-50%, 50%);
-  z-index: 9999;
+  z-index: 99;
 }
 
 img.flower {

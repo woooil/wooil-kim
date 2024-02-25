@@ -6,6 +6,7 @@ const TREE_HEIGHT = 300
 const FLOWER_HEIGHT_STD = 35
 const FLOWER_COUNT = 9
 const WORLD_CLASS = 'world'
+const GRASS_CLASS = 'grass'
 const TREE_CLASS = 'tree'
 const BIRD_CLASS = 'bird'
 const FLOWER_CLASS = 'flower'
@@ -161,6 +162,14 @@ function World() {
     <div
       className={WORLD_CLASS}
       onClick={worldClickHandler}>
+      <svg
+        className={GRASS_CLASS}
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 -0.75 9 0.75'
+        preserveAspectRatio='none'
+        style={{ height: `${TREE_HEIGHT * 0.25}px` }}>
+        <path d='M 0 0 C 1 -1 8 -1 9 0' />
+      </svg>
       <img
         className={TREE_CLASS}
         src={`${process.env.PUBLIC_URL}/img/tree.png`}
