@@ -27,13 +27,20 @@ img.tree {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 2;
 }
 
 img.bird {
   width: 40px;
   position: absolute;
   transform: translate(-50%, 50%);
+  cursor: pointer;
   z-index: 99;
+}
+
+img.bird-reversed {
+  transform: scaleX(-1) translate(50%, 50%);
 }
 
 img.flower {
@@ -44,6 +51,7 @@ img.flower {
   transform-origin: 0% 100%;
   -webkit-animation: blossom 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   animation: blossom 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  z-index: 3;
 }
 
 .tree-box-container {
@@ -51,6 +59,7 @@ img.flower {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
+  z-index: 1;
 }
 
 img.flower-falling {

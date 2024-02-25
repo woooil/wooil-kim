@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Bezier3 } from '.././lib/bezier'
+import { EaseMode, Bezier3 } from '../lib/bezier'
+import { useInterval } from '../lib/useInterval'
 import './World.css'
 
 const TREE_HEIGHT = 300
@@ -9,11 +10,13 @@ const WORLD_CLASS = 'world'
 const GRASS_CLASS = 'grass'
 const TREE_CLASS = 'tree'
 const BIRD_CLASS = 'bird'
+const BIRD_REV_CLASS = 'bird-reversed'
 const FLOWER_CLASS = 'flower'
 const FLOWER_FALLING_CLASS = 'flower-falling'
 const TREE_BOX_CLASS = 'tree-box'
 
 let flowerIdCounter = 0
+let rafId: number | undefined = undefined
 
 interface Flower {
   id: number
@@ -35,15 +38,15 @@ function getRandomInt(min: number, max: number) {
 }
 
 function World() {
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const [pos, setPos] = useState({ x: 0, y: 0, reversed: false })
   const [flowers, setFlowers] = useState<Flower[]>([])
 
   const treeStyle = {
     height: `${TREE_HEIGHT}px`,
   }
   const birdStyle = {
-    left: `${50 + pos.x}%`,
-    bottom: `calc(${TREE_HEIGHT * 0.6}px + ${pos.y}%)`,
+    left: `calc(50% + ${pos.x}px)`,
+    bottom: `${pos.y}px`,
   }
   const treeBoxStyle: React.CSSProperties = {
     position: 'relative',
@@ -65,26 +68,6 @@ function World() {
     ...treeBoxStyle,
     width: `${TREE_HEIGHT * 0.8}px`,
     height: `${TREE_HEIGHT * 0.25}px`,
-  }
-
-  const render = (bezier: Bezier3, repeat = true) => {
-    const p = bezier.next()
-    setPos(p)
-    if (!bezier.hasNext()) {
-      if (repeat) {
-        const newBezier = Bezier3.getFixedEnds(
-          p,
-          { x: 0, y: 0 },
-          -50,
-          50,
-          0,
-          100,
-        )
-        requestAnimationFrame(() => render(newBezier, false))
-      }
-    } else {
-      requestAnimationFrame(() => render(bezier, repeat))
-    }
   }
 
   const blossom = (left: number, bottom: number) => {
@@ -128,14 +111,68 @@ function World() {
     return { left, bottom }
   }
 
+  const worldDim = () => {
+    const world = document.querySelector(`.${WORLD_CLASS}`)!
+    const rect = world.getBoundingClientRect()
+    return {
+      width: rect.width,
+      height: rect.height,
+    }
+  }
+
+  const render = (bezier: Bezier3, repeat = true) => {
+    const p = bezier.next()
+    setPos((prev) => {
+      if (prev.x <= p.x) return { ...p, reversed: false }
+      else return { ...p, reversed: true }
+    })
+    if (!bezier.hasNext()) {
+      if (repeat) {
+        const end = randomInTreeBox()
+        const dim = worldDim()
+        const newBezier = Bezier3.getFixedEnds(
+          p,
+          { x: end.left, y: end.bottom },
+          -dim.width / 2,
+          dim.width / 2,
+          0,
+          dim.height,
+        )
+        newBezier.easeMode = 'easeInOutQuad'
+        rafId = requestAnimationFrame(() => render(newBezier, false))
+      } else {
+        rafId = undefined
+      }
+    } else {
+      rafId = requestAnimationFrame(() => render(bezier, repeat))
+    }
+  }
+
+  const fly = (easeMode: EaseMode, end?: { x: number; y: number }) => {
+    const dim = worldDim()
+    const bezier = Bezier3.getFixedEnds(
+      pos,
+      end,
+      -dim.width / 2,
+      dim.width / 2,
+      0,
+      dim.height,
+    )
+    bezier.easeMode = easeMode
+    rafId && cancelAnimationFrame(rafId)
+    rafId = requestAnimationFrame(() => render(bezier))
+  }
+
   const worldClickHandler = (e: React.MouseEvent) => {
     const elements = document.elementsFromPoint(e.clientX, e.clientY)
-    if (
-      elements.filter((e) => e.classList.contains(BIRD_CLASS)).length > 0 ||
+    if (elements.filter((e) => e.classList.contains(BIRD_CLASS)).length > 0) {
+      fly('linear')
+    } else if (
       elements.filter((e) => e.classList.contains(TREE_CLASS)).length === 0
     ) {
-      const bezier = Bezier3.getFixedEnds(pos, undefined, -50, 50, 0, 100)
-      requestAnimationFrame(() => render(bezier))
+      const dim = worldDim()
+      const end = { x: e.clientX - dim.width / 2, y: dim.height - e.clientY }
+      fly('linear', end)
     } else if (
       elements.filter((e) => e.classList.contains(TREE_BOX_CLASS)).length > 0
     ) {
@@ -151,12 +188,19 @@ function World() {
     }
   }
 
+  useInterval(() => {
+    if (rafId) return
+    fly('easeInCubic')
+  }, 10000)
+
   useEffect(() => {
+    const { left, bottom } = randomInTreeBox()
+    setPos({ x: left, y: bottom, reversed: false })
     for (let i = 1; i <= FLOWER_COUNT; i++) {
       const img = new Image()
       img.src = `${process.env.PUBLIC_URL}/img/flower${i}.png`
     }
-  })
+  }, [])
 
   return (
     <div
@@ -177,7 +221,7 @@ function World() {
         style={treeStyle}
       />
       <img
-        className={BIRD_CLASS}
+        className={`${BIRD_CLASS} ${pos.reversed ? BIRD_REV_CLASS : ''}`}
         src={`${process.env.PUBLIC_URL}/img/bird.png`}
         alt='bird'
         style={birdStyle}

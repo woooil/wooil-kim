@@ -7,11 +7,18 @@ export interface Coord {
   y: number
 }
 
+export type EaseMode =
+  | 'linear'
+  | 'easeInCubic'
+  | 'easeOutQuart'
+  | 'easeInOutQuad'
+
 export class Bezier3 {
   readonly p0: Coord
   readonly p1: Coord
   readonly p2: Coord
   readonly p3: Coord
+  easeMode: EaseMode = 'linear'
   step: number = 100
   private _currStep: number = 0
   private t: number = 0
@@ -46,6 +53,21 @@ export class Bezier3 {
     return new Bezier3(p0, p1, p2, p3)
   }
 
+  private ease(t: number) {
+    switch (this.easeMode) {
+      case 'linear':
+        return t
+      case 'easeInCubic':
+        return t * t * t
+      case 'easeOutQuart':
+        return 1 - (1 - t) * (1 - t) * (1 - t) * (1 - t)
+      case 'easeInOutQuad':
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
+      default:
+        return t
+    }
+  }
+
   pointAt(t: number) {
     if (t < 0 || t > 1) throw new Error(`t is out of range: ${t}`)
     const c = 1 - t
@@ -67,6 +89,6 @@ export class Bezier3 {
     if (this.currStep > this.step) throw new Error(`End of curve`)
     this.t = this.currStep / this.step
     this.currStep += 1
-    return this.pointAt(this.t)
+    return this.pointAt(this.ease(this.t))
   }
 }
