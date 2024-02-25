@@ -33,3 +33,43 @@ a {
   font-size: 1rem;
   text-align: center;
 }
+
+.show-captcha-button {
+  font-family: inherit;
+  background: none;
+  border: none;
+  font-size: inherit;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+}
+
+.contacts.mail.beforeMatched {
+  align-items: flex-end;
+}
+
+.captcha-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+.answer {
+  font-family: inherit;
+  padding: 8px;
+  border: none;
+}
+
+.submit {
+  font-family: inherit;
+  padding: 8px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #d9d9d9;
+}
+
+.submit:hover {
+  background: #8d8d8d;
+}
