@@ -4,6 +4,7 @@ import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
   validateCaptcha,
+  // @ts-ignore
 } from 'react-simple-captcha'
 import { ReactComponent as Github } from '../components/github.svg'
 import './About.css'
